@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/26 15:42:04 by isfernan          #+#    #+#             */
+/*   Updated: 2021/02/26 16:25:51 by isfernan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo_one.h"
 
-int n = 0;
+int g_n = 0;
 
 int main(int argc, char **argv)
 {
@@ -11,8 +22,8 @@ int main(int argc, char **argv)
 		return (-1);
 	p = malloc(sizeof(t_philo));
 	p->num = atoi(argv[1]);
-	n = p->num;
-	printf("el n vale ahora %i\n", n);
+	g_n = p->num;
+	printf("el n vale ahora %i\n", g_n);
 	p->tdie = atoi(argv[2]);
 	p->teat = atoi(argv[3]);
 	p->tsleep = atoi(argv[4]);
@@ -72,26 +83,30 @@ void	create_threads(t_philo *p)
 
 void	*start_tasks(void *i)
 {
-	pthread_mutex_t mutex;
-    //mutex = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(&mutex, NULL);
-    while (TRUE) 
+	int		j;
+	int		*i2;
+
+	j = 0;
+	i2 = i;
+	pthread_mutex_t *mutex;
+	mutex = malloc(sizeof(pthread_mutex_t) * (g_n));
+	printf("hasta aquí\n");
+	while (j < g_n)
 	{
-        pthread_mutex_lock(&mutex);
-
-        // check if all COUNT_TO has been arrived at
-        if (i >= COUNT_TO) {
-            pthread_mutex_unlock(&mutex);
-            return NULL;
-        }
-
-        ++i;
-
-        // release lock
-        pthread_mutex_unlock(&mutex);
-
-        printf("i = %lld\n", i);
-    }
-    pthread_mutex_destroy(&mutex);
-    //free(mutex);
+		pthread_mutex_init(&(mutex[j]), NULL);
+		j++;
+	}
+	while (1)
+	{
+		pthread_mutex_lock(&mutex[*i2]);
+		if (*i2 == g_n)
+			pthread_mutex_lock(&mutex[0]);
+		else
+			pthread_mutex_lock(&mutex[*i2 + 1]);
+		
+		printf("philo %i has taken a fork\n", *i2);
+		pthread_mutex_unlock(&mutex[*i2]);
+	}
+	//pthread_mutex_destroy(&mutex);
+	free(mutex);
 }
