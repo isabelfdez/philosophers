@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/26 15:41:57 by isfernan          #+#    #+#             */
-/*   Updated: 2021/02/26 15:41:58 by isfernan         ###   ########.fr       */
+/*   Created: 2021/03/15 16:46:13 by isfernan          #+#    #+#             */
+/*   Updated: 2021/03/15 16:47:44 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <pthread.h>
 #include <stdio.h>
@@ -17,13 +18,10 @@
 #define COUNT_TO  100000
 #define MAX_CORES 12
 
-//static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 long long i = 0;
 
 void *start_counting(void *arg) {
-    pthread_mutex_t mutex;
-    //mutex = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(&mutex, NULL);
     for (;;) {
         // acquire lock
         pthread_mutex_lock(&mutex);
@@ -41,9 +39,6 @@ void *start_counting(void *arg) {
 
         printf("i = %lld\n", i);
     }
-    pthread_mutex_destroy(&mutex);
-    //free(mutex);
-
 }
 
 int main(void) {
@@ -61,7 +56,6 @@ int main(void) {
     for (i = 0; i < MAX_CORES; ++i) {
         pthread_join(thread_group[i], NULL);
     }
-   
+
     return EXIT_SUCCESS;
 }
-

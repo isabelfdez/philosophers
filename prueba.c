@@ -6,28 +6,21 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/26 16:14:06 by isfernan          #+#    #+#             */
-/*   Updated: 2021/02/26 16:18:11 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/15 19:13:15 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 
-void    prueba(void *a)
+
+typedef struct s_hola
 {
-    int *z;
-
-    z = a;
-    printf("el número recibido es %i\n", *z);
-}
-
+    int    *a;
+}               t_hola;
 
 int main()
 {
-    int *a;
-
-    a = malloc(sizeof(int));
-    *a = 36;
-    printf("el número indicado por el puntero es %i\n", *a);
-    prueba(a);
+    printf("size = %lu\n", sizeof(t_hola));
+    return (0);
 }
