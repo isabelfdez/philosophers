@@ -6,11 +6,33 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/26 15:42:04 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/15 20:51:18 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/17 19:45:03 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+void	print_message(t_philo *t, int a)
+{
+	struct timeval	ctime;
+	suseconds_t		ret;
+
+	pthread_mutex_lock(&t->state->write_m);
+	gettimeofday(&ctime, NULL);
+	ret = takeoff_time(ctime, t->state->start);
+	printf("%d philo %d ", ret, t->pos);
+	if (a == TYPE_EAT)
+		printf("is eating\n");
+	if (a == TYPE_SLEEP)
+		printf("is sleeping\n");
+	if (a == TYPE_CHOPSTICK)
+		printf("has taken a chopstick\n");
+	if (a == TYPE_THINK)
+		printf("is thinking\n");
+	if (a == TYPE_DIED)
+		printf("has died\n");
+	
+}
 
 int		check_arguments(int argc, char **argv)
 {
@@ -38,70 +60,19 @@ int		check_arguments(int argc, char **argv)
 	return (1);
 }
 
-int		init_mutex(t_state *p)
-{
-	int		i;
-
-	i = -1;
-	
-	//pthread_mutex_init(&p->write_m, NULL);
-	pthread_mutex_init(&p->dead_m, NULL);
-	//pthread_mutex_lock(&p->dead_m);
-	if (!(p->fork_m = malloc(sizeof(pthread_mutex_t) * p->num)))
-		return (0);
-	while (++i < p->num)
-		pthread_mutex_init(&p->fork_m[i], NULL);
-	return (1);
-}
-
-int		init(t_state *p)
-{
-	int		i;
-
-	i = -1;
-	//p->fork_m = NULL;
-	//p->philo = NULL;
-	if (!(p->philos = malloc(sizeof(t_philo) * p->num)))
-		return (0);
-	while (++i < p->num)
-	{
-		p->philos[i].pos = i;
-		p->philos[i].is_eating = 0;
-		p->philos[i].lfork = i;
-		p->philos[i].rfork = (i + 1) % p->num;
-		p->philos[i].eat_count = 0;
-		p->philos[i].state = p;
-	}
-	return (init_mutex(p));
-}
-
 void	*routine(void *phi)
 {
 	t_philo *t;
 
 	t = (t_philo *)phi;
+	t->last_meal = t->state->start;
+	t->limit = sum_time(t->last_meal, t->state->tdie);
 	while (1)
 	{
-		eat(t_philo);
+		pick_chopsticks(t);
 		
 	}
-}
-
-int		init_threads(t_state *p)
-{
-	int		i;
-	void	*phi;
-
-	i = -1;
-	while (++i < p->num)
-	{
-		phi = (void *)(&p->philos[i]);
-		if (pthread_create(&p->philos[i].id, NULL, routine, phi))
-			return (0);
-		pthread_detach(p->philos[i]);
-		usleep(100);
-	}
-	return (1);
+	return (NULL);
 }
 
 int		main(int argc, char **argv)
@@ -124,54 +95,3 @@ int		main(int argc, char **argv)
 	if (!init_threads(p))
 		return (ft_error(p, NULL)); /* Aquí hay que cambiarlo */
 }
-
-/*void	create_threads(t_philo *p)
-{
-	pthread_t	*threads;
-	long		i;
-	int			j;
-
-	i = 0;
-	j = 0;
-	threads = malloc(sizeof(pthread_t) * p->num);
-	while (i < p->num)
-	{
-		 pthread_create(&threads[i], NULL, start_tasks, (void *)i);
-		 i++;
-	}
-	while (j < p->num)
-	{
-        pthread_join(threads[j], NULL);
-		j++;
-	}
-}
-
-void	*start_tasks(void *i)
-{
-	int		j;
-	int		*i2;
-
-	j = 0;
-	i2 = i;
-	pthread_mutex_t *mutex;
-	mutex = malloc(sizeof(pthread_mutex_t) * (g_n));
-	printf("hasta aquí\n");
-	while (j < g_n)
-	{
-		pthread_mutex_init(&(mutex[j]), NULL);
-		j++;
-	}
-	while (1)
-	{
-		pthread_mutex_lock(&mutex[*i2]);
-		if (*i2 == g_n)
-			pthread_mutex_lock(&mutex[0]);
-		else
-			pthread_mutex_lock(&mutex[*i2 + 1]);
-		
-		printf("philo %i has taken a fork\n", *i2);
-		pthread_mutex_unlock(&mutex[*i2]);
-	}
-	//pthread_mutex_destroy(&mutex);
-	free(mutex);
-}*/

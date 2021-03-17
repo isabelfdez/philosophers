@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:47:43 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/15 19:42:10 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/17 19:40:36 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,32 @@ int			ft_error(t_state *p, char *str)
 	if (str)
 		ft_putendl_fd(str, 1);
 	return (0);
+}
+
+struct timeval	sum_time(struct timeval a, suseconds_t b)
+{
+	struct timeval	c;
+
+	c.tv_usec = b + a.tv_usec;
+	if (c.tv_usec < 1000000)
+		c.tv_sec = a.tv_sec;
+	else
+	{
+		c.tv_sec = a.tv_sec + 1;
+		c.tv_usec = c.tv_usec - 1000000;
+	}
+	return (c);
+}
+
+suseconds_t		takeoff_time(struct timeval a, struct timeval b)
+{
+	suseconds_t	aux;
+
+	if (a.tv_sec == b.tv_sec)
+		return (a.tv_usec - b.tv_usec);
+	else
+	{
+		aux = a.tv_usec - b.tv_usec;
+		return (aux + (a.tv_sec - b.tv_sec) * 1000000);
+	}
 }
