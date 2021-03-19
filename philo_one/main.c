@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/26 15:42:04 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/19 12:56:40 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/19 18:35:36 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ int		main(int argc, char **argv)
 	if (argc == 6)
 		p->meals = ft_atoi(argv[5]);
 	else
-		p->meals = -1;
+		p->meals = 0;
 	if (!init(p))
 		return (ft_error(p, "Memory allocation error\n"));
 	if (!init_threads(p))
-		return (ft_error(p, NULL)); /* Aquí hay que cambiarlo */
+		return (ft_error(p, "Unexpected error\n"));
+	pthread_mutex_lock(&p->dead_m);
+	return (0);
 }

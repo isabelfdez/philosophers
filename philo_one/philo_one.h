@@ -14,6 +14,16 @@
 # define TYPE_DIED 			4
 # define TYPE_OVER 			5
 
+
+# define KNRM  "\x1B[0m"
+# define KRED  "\x1B[31m"
+# define KGRN  "\x1B[32m"
+# define KYEL  "\x1B[33m"
+# define KBLU  "\x1B[34m"
+# define KMAG  "\x1B[35m"
+# define KCYN  "\x1B[36m"
+# define KWHT  "\x1B[37m"
+
 typedef struct		s_philo
 {
 	int				pos;
@@ -25,8 +35,7 @@ typedef struct		s_philo
 	int				eat_count;
 	struct s_state	*state;
 	pthread_t		id;
-	pthread_mutex_t	mutex;
-	//pthread_mutex_t	eat_m;
+	pthread_mutex_t	eat_m;
 }					t_philo;
 
 typedef struct		s_state
@@ -82,6 +91,8 @@ int     			ft_error(t_state *p, char *str);
 int					ft_strlen(char *str);
 struct timeval		sum_time(struct timeval a, suseconds_t b);
 suseconds_t			takeoff_time(struct timeval b);
+uint64_t			get_time(struct timeval tv);
+
 
 
 #endif

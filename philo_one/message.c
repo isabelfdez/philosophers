@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:52:30 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/19 14:01:30 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/19 19:19:58 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ void	print_message(t_philo *t, int a)
 
 	pthread_mutex_lock(&t->state->write_m);
 	ret = takeoff_time(t->state->start);
-	printf("%d philo %d ", ret/1000, t->pos);
+	printf("%s%dms %sphilo %d ", KBLU, ret/1000, KWHT, t->pos);
 	if (a == TYPE_EAT)
-		printf("is eating\n");
+		printf("%sis eating\n", KGRN);
 	if (a == TYPE_SLEEP)
-		printf("is sleeping\n");
+		printf("%sis sleeping\n", KCYN);
 	if (a == TYPE_CHOPSTICK)
-		printf("has taken a chopstick\n");
+		printf("%shas taken a chopstick\n", KYEL);
 	if (a == TYPE_THINK)
-		printf("is thinking\n");
+		printf("%sis thinking\n", KMAG);
 	if (a == TYPE_DIED)
-		printf("has died\n");
+		printf("%shas died\n", KRED);
+	if (a == TYPE_OVER)
+		printf("%smust eat count reached\n", KRED);
     pthread_mutex_unlock(&t->state->write_m);
 }
