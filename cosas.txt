@@ -1,1 +1,0 @@
-hacer que el atoi no coja números negativos
