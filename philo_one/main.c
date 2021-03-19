@@ -6,33 +6,11 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/26 15:42:04 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/17 19:45:03 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/19 12:56:40 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-
-void	print_message(t_philo *t, int a)
-{
-	struct timeval	ctime;
-	suseconds_t		ret;
-
-	pthread_mutex_lock(&t->state->write_m);
-	gettimeofday(&ctime, NULL);
-	ret = takeoff_time(ctime, t->state->start);
-	printf("%d philo %d ", ret, t->pos);
-	if (a == TYPE_EAT)
-		printf("is eating\n");
-	if (a == TYPE_SLEEP)
-		printf("is sleeping\n");
-	if (a == TYPE_CHOPSTICK)
-		printf("has taken a chopstick\n");
-	if (a == TYPE_THINK)
-		printf("is thinking\n");
-	if (a == TYPE_DIED)
-		printf("has died\n");
-	
-}
 
 int		check_arguments(int argc, char **argv)
 {
@@ -58,21 +36,6 @@ int		check_arguments(int argc, char **argv)
 		return (0);
 	}
 	return (1);
-}
-
-void	*routine(void *phi)
-{
-	t_philo *t;
-
-	t = (t_philo *)phi;
-	t->last_meal = t->state->start;
-	t->limit = sum_time(t->last_meal, t->state->tdie);
-	while (1)
-	{
-		pick_chopsticks(t);
-		
-	}
-	return (NULL);
 }
 
 int		main(int argc, char **argv)

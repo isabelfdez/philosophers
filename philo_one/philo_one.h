@@ -53,6 +53,26 @@ int					init(t_state *p);
 int					init_mutex(t_state *p);
 int					init_threads(t_state *p);
 
+
+
+/*
+**	actions.c
+*/
+
+void    			eat(t_philo *t);
+void    			pick_chopsticks(t_philo *t);
+void    			leave_chopsticks(t_philo *t);
+
+
+
+/*
+**	message.c
+*/
+
+void				print_message(t_philo *t, int a);
+
+
+
 /*
 **	utils.c
 */
@@ -61,7 +81,7 @@ int					ft_atoi(const char *str);
 int     			ft_error(t_state *p, char *str);
 int					ft_strlen(char *str);
 struct timeval		sum_time(struct timeval a, suseconds_t b);
-suseconds_t			takeoff_time(struct timeval a, struct timeval b);
+suseconds_t			takeoff_time(struct timeval b);
 
 
 #endif

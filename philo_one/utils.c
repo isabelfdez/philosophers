@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:47:43 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/17 19:40:36 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/19 13:13:46 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,12 @@ struct timeval	sum_time(struct timeval a, suseconds_t b)
 	return (c);
 }
 
-suseconds_t		takeoff_time(struct timeval a, struct timeval b)
+suseconds_t		takeoff_time(struct timeval b)
 {
-	suseconds_t	aux;
+	suseconds_t		aux;
+	struct timeval	a;
 
+	gettimeofday(&a, NULL);
 	if (a.tv_sec == b.tv_sec)
 		return (a.tv_usec - b.tv_usec);
 	else

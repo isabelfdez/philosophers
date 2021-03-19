@@ -6,9 +6,27 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:55:13 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/17 19:20:39 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/19 14:05:14 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philo_one.h"
+
+void	*routine(void *phi)
+{
+	t_philo *t;
+
+	t = (t_philo *)phi;
+	t->last_meal = t->state->start;
+	t->limit = sum_time(t->last_meal, t->state->tdie);
+	while (1)
+	{
+		pick_chopsticks(t);
+		eat(t);
+		leave_chopsticks(t);
+	}
+	return (NULL);
+}
 
 int		init(t_state *p)
 {
@@ -59,8 +77,8 @@ int		init_threads(t_state *p)
 		phi = (void *)(&p->philos[i]);
 		if (pthread_create(&p->philos[i].id, NULL, routine, phi))
 			return (0);
+		//usleep(100);
 		pthread_detach(p->philos[i].id);
-		usleep(100);
 	}
 	return (1);
 }
