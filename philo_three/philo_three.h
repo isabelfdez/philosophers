@@ -1,11 +1,25 @@
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_three.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/22 19:33:14 by isfernan          #+#    #+#             */
+/*   Updated: 2021/03/22 20:45:30 by isfernan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILO_THREE_H
+# define PHILO_THREE_H
 
 # include <stdio.h>
 # include <sys/time.h>
+# include <fcntl.h> 
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
+# include <semaphore.h>
 
 # define TYPE_EAT 			0
 # define TYPE_SLEEP 		1
@@ -13,6 +27,11 @@
 # define TYPE_THINK			3
 # define TYPE_DIED 			4
 # define TYPE_OVER 			5
+
+# define SEM_CHOPSTICKS		"/SemChopsticks"
+# define SEM_WRITE			"/SemWrite"
+# define SEM_DEAD			"/SemDead"
+# define SEM_MEALS			"/SemMeals"
 
 # define KNRM  "\x1B[0m"
 # define KRED  "\x1B[31m"
@@ -33,7 +52,7 @@ typedef struct s_philo
 	int				rfork;
 	int				eat_count;
 	struct s_state	*state;
-	pthread_t		id;
+	pid_t   		pid;
 }					t_philo;
 
 typedef struct s_state
@@ -47,15 +66,16 @@ typedef struct s_state
 	struct timeval	start;
 
 	t_philo			*philos;
-	pthread_mutex_t	*fork_m;
-	pthread_mutex_t	write_m;
-	pthread_mutex_t	dead_m;
+	sem_t			*chopsticks;
+	sem_t			*write;
+	sem_t			*dead;
+	sem_t			*meal_count;
 }					t_state;
 
 /*
 **	init.c
 */
-int					init_threads(t_state *p);
+int					init_forks(t_state *p);
 
 /*
 **	actions.c
@@ -68,12 +88,14 @@ void				leave_chopsticks(t_philo *t);
 **	message.c
 */
 void				print_message(t_philo *t, int a, int b);
+
 /*
 **	utils.c
 */
 int					ft_atoi(const char *str);
 int					ft_error(t_state *p, char *str);
 int					ft_strlen(char *str);
+sem_t				*ft_create_sem(char const *str, int value);
 
 /*
 **	time.c

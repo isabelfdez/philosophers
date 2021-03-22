@@ -6,17 +6,17 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 12:52:30 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:27:54 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/22 20:29:47 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 void	print_message(t_philo *t, int a, int b)
 {
 	suseconds_t		ret;
 
-	pthread_mutex_lock(&t->state->write_m);
+	sem_wait(t->state->write);
 	ret = takeoff_time(t->state->start);
 	printf("%s%dms %sphilo %d ", KBLU, ret / 1000, KWHT, t->pos);
 	if (a == TYPE_EAT)
@@ -32,5 +32,5 @@ void	print_message(t_philo *t, int a, int b)
 	if (a == TYPE_OVER)
 		printf("%smust eat count reached\n", KRED);
 	if (b)
-		pthread_mutex_unlock(&t->state->write_m);
+		sem_post(t->state->write);
 }

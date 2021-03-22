@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/03/15 17:57:43 by isfernan          #+#    #+#              #
-#    Updated: 2021/03/22 16:27:23 by isfernan         ###   ########.fr        #
+#    Created: 2021/03/22 19:33:40 by isfernan          #+#    #+#              #
+#    Updated: 2021/03/22 20:23:50 by isfernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ OBJS 	= $(SRCS:.c=.o)
 
 FLAGS	= -Wall -Werror -Wextra
 
-NAME	= philo_one
+NAME	= philo_three
 
 all:		$(OBJS)
 			-@gcc -o $(NAME) $(OBJS)

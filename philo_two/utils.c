@@ -6,11 +6,11 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/15 17:47:43 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 19:20:59 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/22 19:09:11 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int	ft_atoi(const char *str)
 {
@@ -39,8 +39,6 @@ int	ft_atoi(const char *str)
 	return (nb);
 }
 
-// Habrá que hacer una función distinta cuando haya que matar mutex
-
 static void	ft_putendl_fd(char *s, int fd)
 {
 	int	i;
@@ -68,22 +66,20 @@ int	ft_strlen(char *str)
 
 int	ft_error(t_state *p, char *str)
 {
-	int	i;
-
-	i = 0;
 	if (p)
 	{
-		pthread_mutex_destroy(&p->dead_m);
-		pthread_mutex_destroy(&p->write_m);
-		while (i < p->num)
-		{
-			pthread_mutex_destroy(&p->fork_m[i]);
-			i++;
-		}
-		free(p->fork_m);
+		sem_unlink(SEM_DEAD);
+		sem_unlink(SEM_WRITE);
+		sem_unlink(SEM_CHOPSTICKS);
 		free(p);
 	}
 	if (str)
 		ft_putendl_fd(str, 1);
 	return (0);
+}
+
+sem_t	*ft_create_sem(char const *str, int value)
+{
+	sem_unlink(str);
+	return (sem_open(str, O_CREAT | O_EXCL, 0644, value));
 }

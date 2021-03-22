@@ -6,17 +6,17 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:57:37 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:28:34 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/22 20:52:27 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
 void	pick_chopsticks(t_philo *t)
 {
-	pthread_mutex_lock(&t->state->fork_m[t->lfork]);
+	sem_wait(t->state->chopsticks);
 	print_message(t, TYPE_CHOPSTICK, 1);
-	pthread_mutex_lock(&t->state->fork_m[t->rfork]);
+	sem_wait(t->state->chopsticks);
 	print_message(t, TYPE_CHOPSTICK, 1);
 }
 
@@ -28,14 +28,16 @@ void	eat(t_philo *t)
 	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
 	usleep(t->state->teat * 1000);
 	t->eat_count++;
+	if (t->eat_count == t->state->meals)
+		sem_post(t->state->meal_count);
 	t->is_eating = 0;
 }
 
 void	leave_chopsticks(t_philo *t)
 {
-	pthread_mutex_unlock(&t->state->fork_m[t->lfork]);
-	pthread_mutex_unlock(&t->state->fork_m[t->rfork]);
+	sem_post(t->state->chopsticks);
+	sem_post(t->state->chopsticks);
 	print_message(t, TYPE_SLEEP, 1);
 	usleep(t->state->tsleep * 1000);
-	print_message(t, TYPE_THINK,  1);
+	print_message(t, TYPE_THINK, 1);
 }

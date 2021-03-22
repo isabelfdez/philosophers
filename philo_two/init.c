@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/17 18:55:13 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:28:53 by isfernan         ###   ########.fr       */
+/*   Created: 2021/03/22 17:51:31 by isfernan          #+#    #+#             */
+/*   Updated: 2021/03/22 20:31:02 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 static void	*monitor_count(void *phi)
 {
@@ -31,7 +31,7 @@ static void	*monitor_count(void *phi)
 		if (i == p->num)
 		{
 			print_message(&p->philos[0], TYPE_OVER, 0);
-			pthread_mutex_unlock(&p->dead_m);
+			sem_post(p->dead);
 			break ;
 		}
 		usleep(1000);
@@ -51,7 +51,7 @@ static void	*monitor(void *phi)
 		if (!t->is_eating && get_time(t->limit) < get_time(ctime))
 		{
 			print_message(t, TYPE_DIED, 0);
-			pthread_mutex_unlock(&t->state->dead_m);
+			sem_post(t->state->dead);
 			return ((void *) 0);
 		}
 		usleep(1000);

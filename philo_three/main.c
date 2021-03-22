@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/26 15:42:04 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 19:14:54 by isfernan         ###   ########.fr       */
+/*   Created: 2021/03/22 16:12:45 by isfernan          #+#    #+#             */
+/*   Updated: 2021/03/22 20:57:52 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
 static int	check_arguments(int argc, char **argv)
 {
@@ -38,19 +38,12 @@ static int	check_arguments(int argc, char **argv)
 	return (1);
 }
 
-static int	init_mutex(t_state *p)
+static int	init_sem(t_state *p)
 {
-	int		i;
-
-	i = -1;
-	pthread_mutex_init(&p->write_m, NULL);
-	pthread_mutex_init(&p->dead_m, NULL);
-	pthread_mutex_lock(&p->dead_m);
-	p->fork_m = malloc(sizeof(pthread_mutex_t) * p->num);
-	if (!p->fork_m)
-		return (0);
-	while (++i < p->num)
-		pthread_mutex_init(&p->fork_m[i], NULL);
+	p->chopsticks = ft_create_sem(SEM_CHOPSTICKS, p->num);
+	p->write = ft_create_sem(SEM_WRITE, 1);
+	p->dead = ft_create_sem(SEM_DEAD, 0);
+	p->meal_count = ft_create_sem(SEM_MEALS, 0);
 	return (1);
 }
 
@@ -59,7 +52,6 @@ static int	init(t_state *p)
 	int		i;
 
 	i = -1;
-	p->fork_m = NULL;
 	p->philos = malloc(sizeof(t_philo) * p->num);
 	if (!p->philos)
 		return (0);
@@ -72,7 +64,7 @@ static int	init(t_state *p)
 		p->philos[i].eat_count = 0;
 		p->philos[i].state = p;
 	}
-	return (init_mutex(p));
+	return (init_sem(p));
 }
 
 int	main(int argc, char **argv)
@@ -92,9 +84,9 @@ int	main(int argc, char **argv)
 		p->meals = 0;
 	if (!init(p))
 		return (ft_error(NULL, "Memory allocation error\n"));
-	if (!init_threads(p))
+	if (!init_forks(p))
 		return (ft_error(p, "Unexpected error\n"));
-	pthread_mutex_lock(&p->dead_m);
+	sem_wait(p->dead);
 	ft_error(p, NULL);
 	return (0);
 }
