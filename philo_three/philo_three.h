@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 19:33:14 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:45:30 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/23 15:46:53 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_philo
 	int				rfork;
 	int				eat_count;
 	struct s_state	*state;
-	pid_t   		pid;
+	pid_t			pid;
 }					t_philo;
 
 typedef struct s_state

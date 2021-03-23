@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 17:51:31 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:54:44 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/23 15:57:39 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@ static void	*monitor_count(void *phi)
 	p = (t_state *)phi;
 	i = -1;
 	while (++i < p->num)
-	{
 		sem_wait(p->meal_count);
-		//usleep(100);
-	}
 	print_message(&p->philos[0], TYPE_OVER, 0);
-	sem_post(p->dead);	
+	sem_post(p->dead);
 	return (NULL);
 }
 
@@ -56,6 +53,7 @@ static void	*routine(t_philo *t)
 	t->last_meal = t->state->start;
 	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
 	pthread_create(&id, NULL, &monitor, (void *)t);
+	pthread_detach(id);
 	while (1)
 	{
 		pick_chopsticks(t);
@@ -82,6 +80,8 @@ int	init_forks(t_state *p)
 	while (++i < p->num)
 	{
 		p->philos[i].pid = fork();
+		if (p->philos[i].pid < 0)
+			return (0);
 		if (p->philos[i].pid == 0)
 		{
 			routine(&p->philos[i]);

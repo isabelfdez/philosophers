@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:57:37 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:28:34 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/23 16:10:48 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	eat(t_philo *t)
 	print_message(t, TYPE_EAT, 1);
 	gettimeofday(&t->last_meal, NULL);
 	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
-	usleep(t->state->teat * 1000);
 	t->eat_count++;
+	usleep(t->state->teat * 1000);
 	t->is_eating = 0;
 }
 
@@ -37,5 +37,5 @@ void	leave_chopsticks(t_philo *t)
 	pthread_mutex_unlock(&t->state->fork_m[t->rfork]);
 	print_message(t, TYPE_SLEEP, 1);
 	usleep(t->state->tsleep * 1000);
-	print_message(t, TYPE_THINK,  1);
+	print_message(t, TYPE_THINK, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:57:37 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:52:27 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/23 15:44:55 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	eat(t_philo *t)
 {
 	t->is_eating = 1;
 	print_message(t, TYPE_EAT, 1);
-	gettimeofday(&t->last_meal, NULL);
-	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
-	usleep(t->state->teat * 1000);
 	t->eat_count++;
 	if (t->eat_count == t->state->meals)
 		sem_post(t->state->meal_count);
+	gettimeofday(&t->last_meal, NULL);
+	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
+	usleep(t->state->teat * 1000);
 	t->is_eating = 0;
 }
 

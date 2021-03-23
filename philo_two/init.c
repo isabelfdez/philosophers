@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 17:51:31 by isfernan          #+#    #+#             */
-/*   Updated: 2021/03/22 20:31:02 by isfernan         ###   ########.fr       */
+/*   Updated: 2021/03/23 15:57:22 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void	*routine(void *phi)
 	t->last_meal = t->state->start;
 	t->limit = sum_time(t->last_meal, t->state->tdie * 1000);
 	pthread_create(&id, NULL, &monitor, phi);
+	pthread_detach(id);
 	while (1)
 	{
 		pick_chopsticks(t);
